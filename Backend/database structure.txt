@@ -1,0 +1,42 @@
+-- Users Table
+CREATE TABLE users (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL
+);
+
+-- Movies Table
+CREATE TABLE movies (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(200) NOT NULL,
+    description TEXT,
+    image_url VARCHAR(255),
+    release_date DATE NOT NULL,
+    duration_minutes INT NOT NULL
+);
+
+-- Showtimes Table
+CREATE TABLE showtimes (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    movie_id BIGINT NOT NULL,
+    theater_name VARCHAR(100) NOT NULL,
+    showtime DATETIME NOT NULL,
+    ticket_price DECIMAL(10, 2) NOT NULL,
+    CONSTRAINT fk_movie FOREIGN KEY (movie_id) REFERENCES movies(id)
+        ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+-- Bookings Table
+CREATE TABLE bookings (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    user_id BIGINT NOT NULL,
+    showtime_id BIGINT NOT NULL,
+    number_of_seats INT NOT NULL,
+    total_price DECIMAL(10, 2) NOT NULL,
+    booking_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users(id)
+        ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_showtime FOREIGN KEY (showtime_id) REFERENCES showtimes(id)
+        ON DELETE CASCADE ON UPDATE CASCADE
+);
